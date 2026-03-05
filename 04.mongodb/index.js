@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
 
 const DB_URL = "mongodb+srv://ptp101:ptp101@cluster0.qxnvmei.mongodb.net/movieapp"
 
-const BookSchema = new Schema({
+const MovieSchema = new Schema({
     title: String,
     description: String,
     price: Number,
@@ -23,7 +23,7 @@ const BookSchema = new Schema({
 })
 
 // MODEL
-const MovieModel = mongoose.model("Movie", BookSchema)
+const MovieModel = mongoose.model("Movie", MovieSchema)
 
 mongoose.connect(DB_URL)
     .then(() => console.log('Connected!'))
@@ -32,15 +32,15 @@ mongoose.connect(DB_URL)
 
 
 // validator midlware
-const moviesValidator = (req, res, next) =>{
-    const {title , description , price,author,stock } =req.body
-    if(!title || !description || !price || !author || !stock){
+const moviesValidator = (req, res, next) => {
+    const { title, description, price, author, stock } = req.body
+    if (!title || !description || !price || !author || !stock) {
         return res.status(400).json({
-            message:'All fields are required',
+            message: 'All fields are required',
             success: false
-    })    
-  }
-  next()
+        })
+    }
+    next()
 }
 
 // get all data
@@ -68,10 +68,6 @@ app.post('/api/movies', moviesValidator, async (req, res) => {
     try {
 
         const { title, description, price, author, stock } = req.body
-
-       
-        
-
         const movies = new MovieModel({
             ...req.body
         })
@@ -97,8 +93,8 @@ app.put('/api/movies/:id', moviesValidator, async (req, res) => {
     try {
 
         const { id } = req.params
-      
-        
+
+
 
         const updatedMovies = await MovieModel.findByIdAndUpdate(
             id,
