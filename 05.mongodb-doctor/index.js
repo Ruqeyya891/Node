@@ -3,14 +3,14 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const app = express()
-const port = 3000
+// const port = 3000
 
 app.use(express.json())
 app.get('/', (req, res) => {
     res.send('Hello World!')
 })
 
-const DB_URL = "mongodb+srv://ptp101:ptp101@cluster0.qxnvmei.mongodb.net/doctorapp"
+// const DB_URL = "mongodb+srv://ptp101:ptp101@cluster0.qxnvmei.mongodb.net/doctorapp"
 
 const DoctorSchema = new Schema({
     name: String,
@@ -64,6 +64,10 @@ app.post('/api/doctor', async (req, res) => {
         })
     }
 })
+
+// app.put('/app/doctor',async(req,res)=>{
+//     try
+// })
 
 
 
