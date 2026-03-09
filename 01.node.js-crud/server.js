@@ -1,47 +1,88 @@
-const exxpress =require('express')
-const { nanoid} = require('nanoid')
+const exxpress = require('express')
+const { nanoid } = require('nanoid')
 const app = express()
 const port = 8080
 
 app.use(express.json())
-const tours=require('./data')
+const tours = require('./data')
 const { log } = require('console')
 
-//http reques methods:GET ,POST , PUT,DELETE
-app.get ('/',(req,res)=>{
-    res.send('Hello World')
-})
-
-app.get('/',(req,res)=>{
-    res.send(`<h1>Hello World<h1>`)
-})
-
-app.get('/message',(req,res)=>{
-    res.json({
-    message :'Hello World!',
-    status:'success',
-    error:null
+app.get('/api/tours', (req, res) => {
+  try {
+    res.status(200).json({
+      data: books,
+      message: 'Tours retrevied successfully',
+      status: 'success',
+      error: null
     })
+  } catch (error) {
+    res.status(500).json({
+      message: 'Internal server error',
+      status: 'error',
+      error: error.message
+    })
+  }
 })
 
- //middleware: function that has access to the request and response objects, and the next function in the application’s request-response cycle. It can execute any code, make changes to the request and response objects, end the request-response cycle, or call the next middleware function in the stack.
-// global variables: __dirname, __filename, process, require, module, exports
+app.get('/api/tours/:id',(req,res)=>{
+  try{
+    const{id}=req.params
+    const tour=tours.find((tour)=>tour.id===id)
 
-//console.log("__dirname:",__dirname)
-//console.log("__filename:",__filename)
+    if(!tour){
+      return res.status(404).json({
+        data:null,
+        message:'Tour not found'
+      })
+    }
+    res.status(200).json({
+        data:tour,
+        message:'Tour retreived successfully'
+    })
+    }catch(error){
+      res.status(500).json({
+        message:'Internal server error',
+        status:'error',
+        error:error.message
+      })
+    }
+  })
 
- //app.get('/home', (req, res) => {
-  // res.sendFile(`${__dirname}/views/home.html`)
-//  })
+  app.delete('/api/tours/:id',(req,res)=>{
+    try{
+      const {id}=req.params
+      const idx=tours.findIndex((tour)=>tour.id===id)
+      
+      if (idx === -1){
+        return res.status(404).json({
+          message:'Tour not found'
+        })
+      }
+      const deleteTour =tours.splice(idx,1)
+      res.status(200).json({
+        message:'Tour deleted successfully',
+        deletedTour:deletedTour[0],
 
-//  app.get('/about', (req, res) => {
-//    res.sendFile(`${__dirname}/views/about.html`)
-//  })
+        updatedTours:tours
+      })
+    }catch (error){
+      res.status(500).json({
+        message:'Interval Server Error',
+        status:error,
+        error:error.message
+      })
+    }
+  })
+  
 
-//  app.use((req, res) => {
-//    res.sendFile(`${__dirname}/views/error.html`)
-//  })
-
-
-
-
+  app.post('/api/tours',(req,res)=>{
+    try{
+      
+    }catch (error){
+      res.status(500).json({
+        message:'Interval Server Error',
+        status:'error',
+        error:error.message
+      })
+    }
+  })
